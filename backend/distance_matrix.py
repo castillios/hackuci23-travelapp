@@ -19,6 +19,10 @@ def by_interest_and_dist(distance: int, interest: str):
     print(json.dumps(response.json(), indent = 4))
     return response.json()
 
+# input origin 
+def by_location(origin:str, end):
+    pass
+
 # input number of miles and will output in kilometers to the nearest integer
 def miles_to_meters(miles: int):
     meters_in_mile = 1609.34
@@ -26,3 +30,16 @@ def miles_to_meters(miles: int):
     return int(miles*meters_in_mile)
 
 #by_interest_and_dist(1609, 'restaurants')
+
+# extract values of an attribute from json file
+def extract_attr(attr: str, distance: int, interest: str):
+    attr_list = []
+    file = by_interest_and_dist(distance, interest)
+
+    for i in range(len(file)):
+        attr_list.append(file["results"][i][attr])
+
+    return attr_list
+
+
+
