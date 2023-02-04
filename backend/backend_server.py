@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from distance_matrix import by_interest_and_dist, get_distance
-from yelp_data import extract_yelp_data
+from yelp_data import get_place
 
 app = Flask(__name__)
 CORS(app)
@@ -19,4 +19,4 @@ def places_by_dist():
 
 @app.route('/yelp')
 def yelp_locations():
-    return jsonify(extract_yelp_data())
+    return jsonify(get_place(keyword="dine beach"))

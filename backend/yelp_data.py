@@ -110,7 +110,7 @@ def extract_yelp_data():
     print('\n' * 10)
     print_locs(json_data)
 
-    return 
+    return json_data
 
         
 
