@@ -70,11 +70,6 @@ def parse_data(loc_interests) -> dict:
     for cat, business_data in loc_interests.items():
         sorted_loc_dict[cat] = []
         for b in business_data['businesses']:
-            print('b looks like:')
-            print(type(b))
-            print(len(b))
-            print(b)
-
             b_dict = dict()
             b_dict['name'] = b['name']
             b_dict['rating'] =  b['rating']
