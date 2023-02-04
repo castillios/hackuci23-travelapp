@@ -57,8 +57,13 @@ business (also a dictionary).
 
 Each business contains the following attributes:
     - Name
-    - Image
+    - Yelp ID (for reference)
     - Rating (threshold?)
+    - Image
+    - IsClosed
+    - Price (if applicable)
+    - Location
+    - Coordinates
     - etc...
 
 This is NOT the final itinerary, but rather a function to sort the data in order
@@ -72,17 +77,29 @@ def parse_data(loc_interests) -> dict:
         for b in business_data['businesses']:
             b_dict = dict()
             b_dict['name'] = b['name']
-            b_dict['rating'] =  b['rating']
+            b_dict['location'] = parse_location_str(b['location'])
             b_dict['img'] = b['image_url']
+            b_dict['rating'] =  b['rating']
             b_dict['is_closed'] = b['is_closed']
             if 'price' in b.keys():
                 b_dict['price'] = b['price']
-            b_dict['loc'] = b['location']
             b_dict['coords'] = b['coordinates']
 
             sorted_loc_dict[cat].append(b_dict)
     return sorted_loc_dict
-    
+
+
+def parse_location_str(loc_dict) -> str:
+    loc_str = ""
+    for i, data in enumerate(loc_dict['display_address']):
+        loc_str += f"{data} "
+    return loc_str
+"""
+Isolates name, addresses, and yelp id
+Filters data to be sent to distance_matrix.py
+Yelp ID is saved that way we can filt
+"""
+
 def print_locs(locs) -> None:
     for loc_type, loc_dict in locs.items():
         print(loc_type)
