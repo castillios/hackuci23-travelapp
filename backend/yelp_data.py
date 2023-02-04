@@ -20,11 +20,36 @@ def format_data(json_data) -> str:
     return json_formatted_str
 
 """
-sort_data returns a dictionary containing keys for categories (business types)
+Performs searches on Yelp and returns a dictionary containing
+JSON data under each category (key)
+
+key : value --> category : JSON data
+"""
+def perform_search(query_dict) -> dict:
+    loc_dict = dict() 
+
+    for category in query_dict.keys():
+        loc_dict[category] = None
+    
+    for cat, query in query_dict.items():
+        string_query = f"{cat} {query}" # i.e. "sightsee beaches" or "dine korean"
+        loc_json = get_place(string_query)
+        loc_dict[cat] = loc_json
+
+    return loc_dict
+
+
+"""
+parse_data returns a dictionary containing keys for categories (business types)
 List of categories:
     - Sightseeing (sightsee)
     - Dining (dine)
     - Shopping (shop)
+
+Outer Dictionary key : values -> category : [business_dict, business_dict2, ...]
+Inner Dictionary key : values -> JSON label : data
+Data List, JSON label = "businesses" --> list contains a dictionaries containing
+data for each business
 
 
 Each category is a list of dictionaries. Each category list contains a different
@@ -40,28 +65,28 @@ This is NOT the final itinerary, but rather a function to sort the data in order
 to easily create the itinerary later on.
 
 """
-def parse_data(json_data, business_type) -> dict:
-    b_data = json_data['businesses']
-    loc_dict = {
-        'sightsee' : [],
-        'dine' : [],
-        'shop' : []
-    }
-    
-    for b in b_data:
-        b_dict = dict()
-        b_dict['name'] = b['name']
-        b_dict['rating'] =  b['rating']
-        b_dict['img'] = b['image_url']
-        b_dict['is_closed'] = b['is_closed']
-        if 'price' in b.keys():
-            b_dict['price'] = b['price']
-        b_dict['loc'] = b['location']
-        b_dict['coords'] = b['coordinates']
+def parse_data(loc_interests) -> dict:
+    sorted_loc_dict = dict()
+    for cat, business_data in loc_interests.items():
+        sorted_loc_dict[cat] = []
+        for b in business_data['businesses']:
+            print('b looks like:')
+            print(type(b))
+            print(len(b))
+            print(b)
 
-        loc_dict[business_type].append(b_dict)
-    
-    return loc_dict
+            b_dict = dict()
+            b_dict['name'] = b['name']
+            b_dict['rating'] =  b['rating']
+            b_dict['img'] = b['image_url']
+            b_dict['is_closed'] = b['is_closed']
+            if 'price' in b.keys():
+                b_dict['price'] = b['price']
+            b_dict['loc'] = b['location']
+            b_dict['coords'] = b['coordinates']
+
+            sorted_loc_dict[cat].append(b_dict)
+    return sorted_loc_dict
     
 def print_locs(locs) -> None:
     for loc_type, loc_dict in locs.items():
@@ -71,21 +96,26 @@ def print_locs(locs) -> None:
                 print(f"{loc}: {loc_data}")
             print('\n' * 2)
 
-        
-
-
-def temp_main():
+def process():
     # User input is temporary, categories will be hard coded later
-    # Simply for testing
-    user_in = input("Enter a search query: ")
+    # Simply for testing (TEMPORARY)
+    sight_query = input("Enter a search query for sightseeing: ")
+    dine_query = input("Enter a search query for dining: ")
+    shop_query = input("Enter a search query for shops: ")
 
-    yelp_json = get_place(user_in)
-    location_dict = parse_data(yelp_json, user_in)
-    print(format_data(yelp_json))
+    # User will be able to specify categories but for now they are all hard coded
+    # Each category has a search query attached to it.
+    cats = {'sightsee' : sight_query, 'dine': dine_query, 'shop' : shop_query}
+    search_results = perform_search(cats)
+    json_data = parse_data(search_results)
+    formatted_json = format_data(json_data)
+
+    # TEMPORARY FOR DEBUGGING
+    print(formatted_json)
     print('\n' * 10)
-    print_locs(location_dict)
+    print_locs(json_data)
 
         
 
 if __name__ == "__main__":
-    temp_main()
+    process()
