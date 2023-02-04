@@ -96,7 +96,7 @@ def print_locs(locs) -> None:
                 print(f"{loc}: {loc_data}")
             print('\n' * 2)
 
-def process():
+def extract_yelp_data():
     # User input is temporary, categories will be hard coded later
     # Simply for testing (TEMPORARY)
     sight_query = input("Enter a search query for sightseeing: ")
@@ -108,14 +108,16 @@ def process():
     cats = {'sightsee' : sight_query, 'dine': dine_query, 'shop' : shop_query}
     search_results = perform_search(cats)
     json_data = parse_data(search_results)
-    formatted_json = format_data(json_data)
 
     # TEMPORARY FOR DEBUGGING
+    formatted_json = format_data(json_data)
     print(formatted_json)
     print('\n' * 10)
     print_locs(json_data)
 
+    return 
+
         
 
 if __name__ == "__main__":
-    process()
+    extract_yelp_data()
