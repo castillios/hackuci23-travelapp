@@ -50,3 +50,4 @@ def extract_attr(attr: str, distance: int, interest: str):
 
 #print(extract_attr("formatted_address", 3000, "restaurants"))
 print(get_distance('Costco Wholesale, 2700 Park Ave, Tustin, CA 92782', '30305 Arroyo Dr, Irvine, CA 92617'))
+dist_file = get_distance('Costco Wholesale, 2700 Park Ave, Tustin, CA 92782', '30305 Arroyo Dr, Irvine, CA 92617')
