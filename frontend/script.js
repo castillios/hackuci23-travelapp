@@ -47,7 +47,13 @@ function SightSeeing()
 function SendOff()
 {
   //give it to mlsa and mlha
-
+  let serverUrl= "https://1589-169-234-111-136.ngrok.io/"
+  fetch(serverUrl)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            //document.getElementById('display').innerHTML = data.message
+        })
 
 }
 
