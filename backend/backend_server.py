@@ -16,7 +16,6 @@ def get_itinerary():
     eat = request.args.get('food') # boolean
 
     activities = request.args.get('Sights') # delimited string with slashes
-    print(type(activities))
     activities = activities.split('/')
 
     # 40,000 meters is the max
@@ -27,7 +26,6 @@ def get_itinerary():
         activities.extend(food)
 
     yelp_dict = extract_yelp_data(activities, radius)
-    print(yelp_dict)
     return jsonify(yelp_dict)
 
 '''
