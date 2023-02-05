@@ -17,6 +17,9 @@ def get_itinerary():
     activities = request.args.get('Sights')
     radius = request.args.get('Miles')
 
+    if eat == True:
+        food = request.args.get('')
+
     yelp_dict = extract_yelp_data()
 
     return "temporary return"

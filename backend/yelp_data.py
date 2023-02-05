@@ -1,3 +1,4 @@
+# yelp_data.py
 import requests
 import json
 
@@ -6,7 +7,7 @@ import json
 def get_place(keyword=""):
     url = "https://api.yelp.com/v3/businesses/search"
 
-    querystring = {"location":"irvine","term":keyword}
+    querystring = {"location":"University of California, Irvine","term":keyword}
 
     payload = ""
     headers = {"Authorization": "Bearer p50ITgphUvksSaf_a2ENswHKJscwJhR5ps0p00g7nfU8SBeBupjw6bfhaIoyLXygUzlKoN6XFxTvU4JTObchhULslD1PKiSLUf4TcYvhA5uhgI5c9c2Q4ICDsw_eY3Yx"}
@@ -27,8 +28,8 @@ key : value --> category : JSON data
 """
 def perform_search(query_list) -> dict:
     loc_dict = dict() 
-    for query in query_list:
-        loc_dict[query] = None
+    # for query in query_list:
+    #     loc_dict[query] = None
 
     for loc_type in query_list:
         loc_json = get_place(loc_type)
@@ -38,6 +39,7 @@ def perform_search(query_list) -> dict:
 
 """
 parse_data returns a dictionary containing keys for categories (business types)
+loc_interests is a fictionary
 List of categories:
     - Sightseeing (sightsee)
     - Dining (dine)
@@ -105,7 +107,16 @@ def print_locs(locs) -> None:
                 print(f"{loc}: {loc_data}")
             print('\n' * 2)
 
-def extract_yelp_data():
+# Returns json data of search queries off of yelp using user input
+# Our parameter user_in would be a list of str inputs received from the user which we iterate through
+def extract_yelp_data(user_in):
+    search_results = perform_search(user_in)
+    # parse data receives a dictionary --> keyword:results
+    json_data = parse_data(search_results)
+    return json_data
+
+
+def test_yelp_data():
     # User input is temporary, categories will be hard coded later
     # Simply for testing (TEMPORARY)
     
@@ -126,4 +137,4 @@ def extract_yelp_data():
         
 
 if __name__ == "__main__":
-    extract_yelp_data()
+    extract_yelp_data("dim sum")
