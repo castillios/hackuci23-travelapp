@@ -114,7 +114,7 @@ def extract_yelp_data(user_in, radius):
     json_data = parse_data(search_results)
 
     # can comment this out -- print is for testing
-    #print(format_data(json_data))
+    print(format_data(json_data))
     return json_data
 
 
@@ -139,4 +139,4 @@ def test_yelp_data(user_in, radius):
         
 
 if __name__ == "__main__":
-    extract_yelp_data("dim sum", 10)
+    extract_yelp_data(['beach', 'library'], 10)
