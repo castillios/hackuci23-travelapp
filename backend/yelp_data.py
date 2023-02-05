@@ -110,6 +110,8 @@ def print_locs(locs) -> None:
 # Our parameter user_in would be a list of str inputs received from the user which we iterate through
 def extract_yelp_data(user_in, radius):
     radius_meters = miles_to_meters(radius)
+    print(type(radius_meters))
+    print(radius_meters)
     search_results = perform_search(user_in, radius_meters)
     # parse data receives a dictionary --> keyword:results
     json_data = parse_data(search_results)
@@ -136,4 +138,4 @@ def test_yelp_data(user_in, radius):
         
 
 if __name__ == "__main__":
-    extract_yelp_data("dim sum", 1000)
+    extract_yelp_data("dim sum", 10)
