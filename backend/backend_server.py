@@ -24,10 +24,13 @@ def get_itinerary():
     # 40,000 meters is the max
     radius = float(request.args.get('Miles'))
 
-    if eat == True:
+    if eat == 'true' or eat == 'True':
         food = request.args.get('Preference')
-        activities.extend(food)
+        activities.append(f"{food} food")
 
+    print("\n")
+    print(activities)
+    print("\n")
     yelp_dict = extract_yelp_data(activities, radius)
     distances = extract_distances(yelp_dict)
     return jsonify(distances)
