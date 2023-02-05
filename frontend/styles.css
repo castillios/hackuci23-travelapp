@@ -99,3 +99,7 @@ html::-webkit-scrollbar-track:hover
 {
     display:none;
 }
+.shadowHide
+{
+    display:none;
+}
