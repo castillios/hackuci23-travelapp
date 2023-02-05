@@ -16,5 +16,9 @@ Scheduler plans based on:
     - Send itinerary to front end
 """
 
-class Itinerary():
-    pass
+class Itinerary:
+    def __init__(radius, interest):
+        pass
+
+    
+
