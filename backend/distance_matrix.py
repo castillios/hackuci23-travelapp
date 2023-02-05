@@ -3,10 +3,11 @@
 
 import requests
 import random
+from api import google_api_key
 
 # get the time and distance in miles between two locations
 def get_distance(addrFrom: str, addrTo: str):
-    api_key = "AIzaSyA58JmLlKl8ILlsOtsgKlAO6hYrUCgRDl0"
+    api_key = google_api_key
     formatted_from = addrFrom.replace(' ', '+')
     formatted_to = addrTo.replace(' ', '+')
 
