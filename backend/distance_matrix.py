@@ -2,7 +2,7 @@
 # using Google's distance matrix API
 
 import requests
-import json
+import random
 
 # get the time and distance in miles between two locations
 def get_distance(addrFrom: str, addrTo: str):
@@ -61,34 +61,39 @@ def convert_to_miles(distance_w_unit: str):
 def extract_distances(yelp_dict):
 
     dist_dict = dict()
+    skip = random.randint(2, 10)
 
     for interest in yelp_dict.keys():
         for place1 in yelp_dict[interest]:
             for place2 in yelp_dict[interest]:
                 
-                if 'name' in place1.keys() and 'name' in place2.keys():
-                    if place1['name'] != place2['name']:
-                        addr1 = place1['location']
-                        addr2 = place2['location']
+                if skip < 5:
+                    if 'name' in place1.keys() and 'name' in place2.keys():
+                        if place1['name'] != place2['name']:
+                            addr1 = place1['location']
+                            addr2 = place2['location']
 
-                        distance_file = get_distance(addr1, addr2)
+                            distance_file = get_distance(addr1, addr2)
 
-                        if 'distance' in distance_file['rows'][0]['elements'][0].keys():
-                            distance = distance_file['rows'][0]['elements'][0]['distance']['text'].replace(',', '')
-                            dist_between = convert_to_miles(distance)
+                            if 'distance' in distance_file['rows'][0]['elements'][0].keys():
+                                distance = distance_file['rows'][0]['elements'][0]['distance']['text'].replace(',', '')
+                                dist_between = convert_to_miles(distance)
 
-                            #dist_between = meters_to_miles(float(distance))
-                            time_between = distance_file['rows'][0]['elements'][0]['duration']['text'][:-5]
+                                #dist_between = meters_to_miles(float(distance))
+                                time_between = distance_file['rows'][0]['elements'][0]['duration']['text'][:-5]
 
-                            if place1['name'] not in dist_dict.keys():
-                                dist_dict[place1['name']] = [{'place2': place2['name'], 'addr1': addr1, 'addr2': addr2,
-                                'dist': dist_between, 'time': time_between}]
-                            else:
-                                dist_dict[place1['name']].append({'place2': place2['name'], 'addr1': addr1, 'addr2': addr2,
-                                'dist': dist_between, 'time': time_between})
+                                if place1['name'] not in dist_dict.keys():
+                                    dist_dict[place1['name']] = [{'place2': place2['name'], 'addr1': addr1, 'addr2': addr2,
+                                    'dist': dist_between, 'time': time_between}]
+                                else:
+                                    dist_dict[place1['name']].append({'place2': place2['name'], 'addr1': addr1, 'addr2': addr2,
+                                    'dist': dist_between, 'time': time_between})
+
+                skip = random.randint(2, 10)
 
     return dist_dict
 
+# output: {name: {'address': place['location'], 'dist_from_uci': dist_between, 'time_from_uci': time_between}}
 def uci_to_location(yelp_dict):
 
     uci_dist_dict = dict()
@@ -103,11 +108,9 @@ def uci_to_location(yelp_dict):
 
                 time_between = distance['rows'][0]['elements'][0]['duration']['text'][:-5]
 
-                uci_dist_dict[place['name']] = {'name': place['name'], 'address': place['location'], 'dist_from_uci': dist_between, 'time_from_uci': time_between}
+                uci_dist_dict[place['name']] = {'address': place['location'], 'dist_from_uci': dist_between, 'time_from_uci': time_between}
 
-    print(uci_dist_dict)
     return uci_dist_dict
-
 
 
 

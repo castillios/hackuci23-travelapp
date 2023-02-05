@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-from distance_matrix import extract_distances
+from distance_matrix import extract_distances, uci_to_location
 from yelp_data import perform_search, extract_yelp_data
+from scheduler import create_itinerary
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -11,8 +12,8 @@ CORS(app, supports_credentials=True)
 @cross_origin(supports_credentials=True)
 def get_itinerary():
 
-    num_hours = request.args.get('Hours')
-    num_activities = request.args.get('numActivities')
+    num_activities = int(request.args.get('numActivites'))
+    #print(type(num_activities))
     eat = request.args.get('food') # boolean
 
     activities = request.args.get('Sights') # delimited string with slashes
@@ -28,24 +29,11 @@ def get_itinerary():
         food = request.args.get('Preference')
         activities.append(f"{food} food")
 
-    print("\n")
-    print(activities)
-    print("\n")
     yelp_dict = extract_yelp_data(activities, radius)
+    #print('got through yelp')
     distances = extract_distances(yelp_dict)
-    return jsonify(distances)
-
-'''
-@app.route('/byaddr')
-def places_by_dist():
-    return jsonify(get_distance('Costco Wholesale, 2700 Park Ave, Tustin, CA 92782', '30305 Arroyo Dr, Irvine, CA 92617'))
-
-@app.route('/yelp')
-def yelp_locations():
-    return jsonify(parse_data(perform_search({'sightsee' : 'hiking', 'dine': 'dim sum', 'shop' : 'plant nursey'})))
-    # return jsonify(get_place(keyword="dine beach"))
+    distances_from_uci = uci_to_location(yelp_dict)
+    itinerary = create_itinerary(distances, distances_from_uci, num_activities)
+    return jsonify(itinerary)
 
 
-# 'hello/mueseum/beach/hike'
-
-'''
