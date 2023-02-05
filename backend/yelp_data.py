@@ -1,12 +1,13 @@
+# yelp_data.py
 import requests
 import json
+from distance_matrix import miles_to_meters
 
 # Returns JSON data
 # dictionary with keys ['businesses', 'total', 'region (containing center)']
-def get_place(keyword=""):
+def get_place(keyword="", radius=10000):
     url = "https://api.yelp.com/v3/businesses/search"
-
-    querystring = {"location":"irvine","term":keyword}
+    querystring = {"location":"University of California, Irvine","term":keyword, "radius":radius}
 
     payload = ""
     headers = {"Authorization": "Bearer p50ITgphUvksSaf_a2ENswHKJscwJhR5ps0p00g7nfU8SBeBupjw6bfhaIoyLXygUzlKoN6XFxTvU4JTObchhULslD1PKiSLUf4TcYvhA5uhgI5c9c2Q4ICDsw_eY3Yx"}
@@ -25,22 +26,17 @@ JSON data under each category (key)
 
 key : value --> category : JSON data
 """
-def perform_search(query_dict) -> dict:
+def perform_search(query_list, radius) -> dict:
     loc_dict = dict() 
-
-    for category in query_dict.keys():
-        loc_dict[category] = None
-    
-    for cat, query in query_dict.items():
-        string_query = f"{cat} {query}" # i.e. "sightsee beaches" or "dine korean"
-        loc_json = get_place(string_query)
-        loc_dict[cat] = loc_json
-
+    for loc_type in query_list:
+        loc_json = get_place(loc_type, radius)
+        loc_dict[loc_type] = loc_json
     return loc_dict
 
 
 """
 parse_data returns a dictionary containing keys for categories (business types)
+loc_interests is a dictionary
 List of categories:
     - Sightseeing (sightsee)
     - Dining (dine)
@@ -72,6 +68,7 @@ to easily create the itinerary later on.
 """
 def parse_data(loc_interests) -> dict:
     sorted_loc_dict = dict()
+    print(loc_interests)
     for cat, business_data in loc_interests.items():
         sorted_loc_dict[cat] = []
         for b in business_data['businesses']:
@@ -108,23 +105,32 @@ def print_locs(locs) -> None:
                 print(f"{loc}: {loc_data}")
             print('\n' * 2)
 
-def extract_yelp_data():
+# Returns json data of search queries off of yelp using user input
+# Our parameter user_in would be a list of str inputs received from the user which we iterate through
+def extract_yelp_data(user_in, radius):
+    radius_meters = miles_to_meters(radius)
+    search_results = perform_search(user_in, radius_meters)
+    # parse data receives a dictionary --> keyword:results
+    json_data = parse_data(search_results)
+
+    # can comment this out -- print is for testing
+    #print(format_data(json_data))
+    return json_data
+
+
+# this function is for testing, can comment out
+def test_yelp_data(user_in, radius):
     # User input is temporary, categories will be hard coded later
     # Simply for testing (TEMPORARY)
-    sight_query = input("Enter a search query for sightseeing: ")
-    dine_query = input("Enter a search query for dining: ")
-    shop_query = input("Enter a search query for shops: ")
-
-    # User will be able to specify categories but for now they are all hard coded
-    # Each category has a search query attached to it.
-    cats = {'sightsee' : sight_query, 'dine': dine_query, 'shop' : shop_query}
-    # {'sightsee' : hiking, 'dine': dim sum, 'shop' : plant nursey}
-    search_results = perform_search(cats)
+    radius_meters = miles_to_meters(radius)
+    search_results = perform_search(user_in, radius_meters)
+    # parse data receives a dictionary --> keyword:results
     json_data = parse_data(search_results)
 
     # TEMPORARY FOR DEBUGGING
+    # Print to console
     formatted_json = format_data(json_data)
-    print(formatted_json)
+    #print(formatted_json)
     print('\n' * 10)
     print_locs(json_data)
 
@@ -133,4 +139,4 @@ def extract_yelp_data():
         
 
 if __name__ == "__main__":
-    extract_yelp_data()
+    extract_yelp_data(['beach', 'library'], 10)

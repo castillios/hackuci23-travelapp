@@ -1,54 +1,40 @@
 # distance_matrix.py
+# using Google's distance matrix API
 
 import requests
 import json
-
-# input distance in miles and an interest;
-# will output json file with results from Google's find place API
-def by_interest_and_dist(distance: int, interest: str):
-    #url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Washington%2C%20DC&destinations=New%20York%20City%2C%20NY&units=imperial&key=AIzaSyA58JmLlKl8ILlsOtsgKlAO6hYrUCgRDl0"
-    api_key = "AIzaSyA58JmLlKl8ILlsOtsgKlAO6hYrUCgRDl0"
-    dist_meters = miles_to_meters(distance)
-    
-    # https://towardsdatascience.com/how-to-use-the-google-places-api-for-location-analysis-and-more-17e48f8f25b1
-    url = f"https://maps.googleapis.com/maps/api/place/textsearch/json?query={interest}+irvine+ca&radius={dist_meters}&region=us&type=restaurant,gym,university,tourist_attraction,store,shopping_mall,park,museum&key={api_key}"
-    payload={}
-    headers = {}
-
-    response = requests.request("GET", url, headers=headers, data=payload)
-    #print(json.dumps(response.json(), indent = 4))
-    return response.json()
 
 # get the time and distance in miles between two locations
 def get_distance(addrFrom: str, addrTo: str):
     api_key = "AIzaSyA58JmLlKl8ILlsOtsgKlAO6hYrUCgRDl0"
     formatted_from = addrFrom.replace(' ', '+')
     formatted_to = addrTo.replace(' ', '+')
+
     base_url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
     full_url = f"{base_url}origins={formatted_from}&destinations={formatted_to}&key={api_key}"
-    response = requests.request("GET", full_url)
+
+    payload={}
+    headers = {}
+
+    response = requests.request("GET", full_url, headers=headers, data=payload)
     return response.json()
 
 
 # input number of miles and will output in kilometers to the nearest integer
 def miles_to_meters(miles: int):
-    meters_in_mile = 1609.34
+    meters_in_mile = 1609
+    meters = miles * meters_in_mile
+    return int(meters)
 
-    return int(miles*meters_in_mile)
+def meters_to_miles(meters: int):
+    miles_in_a_meter = 0.000621371
+    miles = float(meters) * float(miles_in_a_meter)
+    return int(miles)
 
-#by_interest_and_dist(1609, 'restaurants')
-
-'''
-# extract values of an attribute from json file
-def extract_attr(attr: str, distance: int, interest: str):
-    attr_list = []
-    file = by_interest_and_dist(distance, interest)
-
-    for i in range(len(file)):
-        attr_list.append(file["results"][i][attr])
-
-    return attr_list
-'''
+def km_to_miles(km: int):
+    km_in_a_mile = 0.621371
+    miles = km_in_a_mile*km
+    return int(miles)
 
 #print(extract_attr("formatted_address", 3000, "restaurants"))
 #print(get_distance('Costco Wholesale, 2700 Park Ave, Tustin, CA 92782', '30305 Arroyo Dr, Irvine, CA 92617'))
@@ -59,32 +45,42 @@ def extract_attr(attr: str, distance: int, interest: str):
     # dist : distance, time : time to get to name2 from name1}]}
 
 
-def extract_distances(yelp_dict, origin):
+def extract_distances(yelp_dict):
 
     dist_dict = dict()
 
-    for estab1 in yelp_dict.keys():
-        for estab2 in yelp_dict.keys():
-            
-            # if establishment 1 and 2 are not the same and the second establishment
-            # isn't already in the dictionary (don't want symmetric duplicates)
-            if estab1 != estab2 and estab2 not in dist_dict.keys():
+    for interest in yelp_dict.keys():
+        for place1 in yelp_dict[interest]:
+            for place2 in yelp_dict[interest]:
 
-                addr1 = yelp_dict[estab1]['location']
-                addr2 = yelp_dict[estab2]['location']
-                distance_file = get_distance(addr1, addr2)
-                dist_between = distance_file['rows'][0]['elements'][0]['distance']['text'][:-3]
-                time_between = distance_file['rows'][0]['elements'][0]['duration']['text'][:-5]
+                if place1['name'] != place2['name']:
+                    addr1 = place1['location']
+                    addr2 = place2['location']
 
-                if estab1 not in dist_dict.keys():
+                    distance_file = get_distance(addr1, addr2)
 
-                    dist_dict[estab1] = [{'estab2': estab2, 'addr1': addr1, 'addr2': addr2,
-                        'dist': dist_between, 'time': time_between}]
+                    if 'distance' in distance_file['rows'][0]['elements'][0].keys():
+                        distance = distance_file['rows'][0]['elements'][0]['distance']['text'].replace(',', '')
+                        unit = distance.split()[-1]
 
-                else:
-                    dist_dict[estab1].append({'estab2': estab2, 'addr1': addr1, 'addr2': addr2,
-                        'dist': dist_between, 'time': time_between})
+                        if unit == 'km':
+                            distance = float(distance[:-3])
+                            dist_between = km_to_miles(distance)
+                        elif unit == 'm':
+                            distance = float(distance[:-2])
+                            dist_between = distance
 
+                        #dist_between = meters_to_miles(float(distance))
+                        time_between = distance_file['rows'][0]['elements'][0]['duration']['text'][:-5]
+
+                        if place1['name'] not in dist_dict.keys():
+                            dist_dict[place1['name']] = [{'place2': place2['name'], 'addr1': addr1, 'addr2': addr2,
+                            'dist': dist_between, 'time': time_between}]
+                        else:
+                            dist_dict[place1['name']].append({'place2': place2['name'], 'addr1': addr1, 'addr2': addr2,
+                            'dist': dist_between, 'time': time_between})
+
+    print(dist_dict)
     return dist_dict
 
 
