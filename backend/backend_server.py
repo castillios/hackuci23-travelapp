@@ -16,9 +16,10 @@ def get_itinerary():
     eat = request.args.get('food') # boolean
 
     activities = request.args.get('Sights') # delimited string with slashes
+    print(type(activities))
     activities = activities.split('/')
 
-    radius = request.args.get('Miles')
+    radius = float(request.args.get('Miles'))
 
     if eat == True:
         food = request.args.get('Preference')
