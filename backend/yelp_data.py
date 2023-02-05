@@ -2,6 +2,7 @@
 import requests
 import json
 from distance_matrix import miles_to_meters
+from api import yelp_api_token
 import random
 
 
@@ -13,7 +14,7 @@ def get_place(keyword="", radius=10000):
 
 
    payload = ""
-   headers = {"Authorization": "Bearer p50ITgphUvksSaf_a2ENswHKJscwJhR5ps0p00g7nfU8SBeBupjw6bfhaIoyLXygUzlKoN6XFxTvU4JTObchhULslD1PKiSLUf4TcYvhA5uhgI5c9c2Q4ICDsw_eY3Yx"}
+   headers = {"Authorization": yelp_api_token}
 
 
    response = requests.request("GET", url, data=payload, headers=headers, params=querystring)
