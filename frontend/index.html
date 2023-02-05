@@ -1,1 +1,45 @@
-hi
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content = "IE=edge">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <script src="./script.js"></script>
+</head>
+<body style="background-color:bisque;">
+    <div class="grid-container">
+        <div class="title">
+            <h1>Petr Adventr</h1>
+        </div>
+        <div class="left"></div>
+        <div class="choices">
+            <h2>How much time do you have? </h2>
+            <label for="userInputBox1"></label>
+            <input type="number" id="userInputBox1" name="userInputBox1" placeholder="Enter hours (1-24)" max="24">
+            <button onclick="NumHours()">Submit</button>
+
+            <h2 id="demo"></h2>
+            <button onclick  = "FoodYes()" id = "YesButton" name = "YesButton" class = "hide"> Yes</button>
+            <button onclick  = "FoodNo()" id = "NoButton" name = "NoButton" class = "hide"> No</button>
+            
+            <h2 id="demo2"></h2>
+            <input type = 'text' name = 'userInputBox3' id = 'userInputBox3' class = 'hide2'
+            placeholder="Beach/Museum/Park/Library" width="500px">
+            <button onclick = "SightSeeing()" id = "sight" name = "sight" class = "hide2"> Submit </button>
+
+
+            <h2 id="demo3"></h2>
+            <input type="number" id="userInputBox4" name="userInputBox4" placeholder="0 miles" class = "hide3">
+            <button onclick = "SendOff()" id = "finisher" name = "finisher" class = "hide3"> Submit </button>
+
+        </div>  
+        <div class="right"></div>
+        <div class="bottom">
+        </div>
+        
+      </div>
+
+</body>
+
+</html>
