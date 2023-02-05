@@ -26,6 +26,15 @@ def miles_to_meters(miles: int):
     meters = miles * meters_in_mile
     return int(meters)
 
+def meters_to_miles(meters: int):
+    miles_in_a_meter = 0.000621371
+    miles = float(meters) * float(miles_in_a_meter)
+    return int(miles)
+
+def km_to_miles(km: int):
+    km_in_a_mile = 0.621371
+    miles = km_in_a_mile*km
+    return int(miles)
 
 #print(extract_attr("formatted_address", 3000, "restaurants"))
 #print(get_distance('Costco Wholesale, 2700 Park Ave, Tustin, CA 92782', '30305 Arroyo Dr, Irvine, CA 92617'))
@@ -39,31 +48,39 @@ def miles_to_meters(miles: int):
 def extract_distances(yelp_dict):
 
     dist_dict = dict()
-    print(yelp_dict)
 
-    for estab1 in yelp_dict.keys():
-        for estab2 in yelp_dict.keys():
-            
-            # if establishment 1 and 2 are not the same and the second establishment
-            # isn't already in the dictionary (don't want symmetric duplicates)
-            if estab1 != estab2 and estab2 not in dist_dict.keys():
-                print(estab1)
-                print(yelp_dict[estab1])
-                addr1 = yelp_dict[estab1]['location']
-                addr2 = yelp_dict[estab2]['location']
-                distance_file = get_distance(addr1, addr2)
-                dist_between = distance_file['rows'][0]['elements'][0]['distance']['text'][:-3]
-                time_between = distance_file['rows'][0]['elements'][0]['duration']['text'][:-5]
+    for interest in yelp_dict.keys():
+        for place1 in yelp_dict[interest]:
+            for place2 in yelp_dict[interest]:
 
-                if estab1 not in dist_dict.keys():
+                if place1['name'] != place2['name']:
+                    addr1 = place1['location']
+                    addr2 = place2['location']
 
-                    dist_dict[estab1] = [{'estab2': estab2, 'addr1': addr1, 'addr2': addr2,
-                        'dist': dist_between, 'time': time_between}]
+                    distance_file = get_distance(addr1, addr2)
 
-                else:
-                    dist_dict[estab1].append({'estab2': estab2, 'addr1': addr1, 'addr2': addr2,
-                        'dist': dist_between, 'time': time_between})
+                    if 'distance' in distance_file['rows'][0]['elements'][0].keys():
+                        distance = distance_file['rows'][0]['elements'][0]['distance']['text'].replace(',', '')
+                        unit = distance.split()[-1]
 
+                        if unit == 'km':
+                            distance = float(distance[:-3])
+                            dist_between = km_to_miles(distance)
+                        elif unit == 'm':
+                            distance = float(distance[:-2])
+                            dist_between = distance
+
+                        #dist_between = meters_to_miles(float(distance))
+                        time_between = distance_file['rows'][0]['elements'][0]['duration']['text'][:-5]
+
+                        if place1['name'] not in dist_dict.keys():
+                            dist_dict[place1['name']] = [{'place2': place2['name'], 'addr1': addr1, 'addr2': addr2,
+                            'dist': dist_between, 'time': time_between}]
+                        else:
+                            dist_dict[place1['name']].append({'place2': place2['name'], 'addr1': addr1, 'addr2': addr2,
+                            'dist': dist_between, 'time': time_between})
+
+    print(dist_dict)
     return dist_dict
 
 
