@@ -22,7 +22,6 @@ function clickme()
     {
     YesButton.classList.toggle("hide");
     NoButton.classList.toggle("hide");  
-    console.log(25)
     t = true;
     }
 }
