@@ -36,7 +36,7 @@ def miles_to_meters(miles: int):
     # dist : distance, time : time to get to name2 from name1}]}
 
 
-def extract_distances(yelp_dict, origin):
+def extract_distances(yelp_dict):
 
     dist_dict = dict()
 
