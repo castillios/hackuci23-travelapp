@@ -115,13 +115,12 @@ def extract_yelp_data(user_in, radius):
     return json_data
 
 
-def test_yelp_data():
+def test_yelp_data(user_in, radius):
     # User input is temporary, categories will be hard coded later
     # Simply for testing (TEMPORARY)
-    
-    # Replace later with requests from frontend
-    user_query = input("Enter a search query: ")
-    search_results = perform_search(user_query)
+    radius_meters = miles_to_meters(radius)
+    search_results = perform_search(user_in, radius_meters)
+    # parse data receives a dictionary --> keyword:results
     json_data = parse_data(search_results)
 
     # TEMPORARY FOR DEBUGGING
@@ -135,5 +134,5 @@ def test_yelp_data():
 
         
 
-# if __name__ == "__main__":
-#     extract_yelp_data("dim sum", 10)
+if __name__ == "__main__":
+    extract_yelp_data("dim sum", 10000)

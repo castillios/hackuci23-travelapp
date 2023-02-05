@@ -25,9 +25,8 @@ def get_itinerary():
         activities.extend(food)
 
     yelp_dict = extract_yelp_data(activities, radius)
-
-    return "temporary return"
-
+    print(yelp_dict)
+    return jsonify(yelp_dict)
 
 '''
 @app.route('/byaddr')
