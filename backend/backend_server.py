@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-from distance_matrix import get_distance
+from distance_matrix import extract_distances
 from yelp_data import perform_search, extract_yelp_data
 
 app = Flask(__name__)
@@ -16,7 +16,10 @@ def get_itinerary():
     eat = request.args.get('food') # boolean
 
     activities = request.args.get('Sights') # delimited string with slashes
-    activities = activities.split('/')
+    try:
+        activities = activities.split('/')
+    except:
+        print('activities is nonetype')
 
     # 40,000 meters is the max
     radius = float(request.args.get('Miles'))
@@ -26,7 +29,8 @@ def get_itinerary():
         activities.extend(food)
 
     yelp_dict = extract_yelp_data(activities, radius)
-    return jsonify(yelp_dict)
+    distances = extract_distances(yelp_dict)
+    return jsonify(distances)
 
 '''
 @app.route('/byaddr')
