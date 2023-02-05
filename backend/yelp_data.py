@@ -118,6 +118,7 @@ def extract_yelp_data():
     # User will be able to specify categories but for now they are all hard coded
     # Each category has a search query attached to it.
     cats = {'sightsee' : sight_query, 'dine': dine_query, 'shop' : shop_query}
+    # {'sightsee' : hiking, 'dine': dim sum, 'shop' : plant nursey}
     search_results = perform_search(cats)
     json_data = parse_data(search_results)
 
