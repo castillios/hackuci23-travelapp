@@ -22,7 +22,7 @@ def get_distance(addrFrom: str, addrTo: str):
 
 # input number of miles and will output in kilometers to the nearest integer
 def miles_to_meters(miles: int):
-    meters_in_mile = 1.609
+    meters_in_mile = 1609
     meters = miles * meters_in_mile
     return int(meters)
 
@@ -39,6 +39,7 @@ def miles_to_meters(miles: int):
 def extract_distances(yelp_dict):
 
     dist_dict = dict()
+    print(yelp_dict)
 
     for estab1 in yelp_dict.keys():
         for estab2 in yelp_dict.keys():
@@ -46,7 +47,8 @@ def extract_distances(yelp_dict):
             # if establishment 1 and 2 are not the same and the second establishment
             # isn't already in the dictionary (don't want symmetric duplicates)
             if estab1 != estab2 and estab2 not in dist_dict.keys():
-
+                print(estab1)
+                print(yelp_dict[estab1])
                 addr1 = yelp_dict[estab1]['location']
                 addr2 = yelp_dict[estab2]['location']
                 distance_file = get_distance(addr1, addr2)
