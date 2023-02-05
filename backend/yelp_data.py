@@ -25,17 +25,14 @@ JSON data under each category (key)
 
 key : value --> category : JSON data
 """
-def perform_search(query_dict) -> dict:
+def perform_search(query_list) -> dict:
     loc_dict = dict() 
+    for query in query_list:
+        loc_dict[query] = None
 
-    for category in query_dict.keys():
-        loc_dict[category] = None
-    
-    for cat, query in query_dict.items():
-        string_query = f"{cat} {query}" # i.e. "sightsee beaches" or "dine korean"
-        loc_json = get_place(string_query)
-        loc_dict[cat] = loc_json
-
+    for loc_type in query_list:
+        loc_json = get_place(loc_type)
+        loc_dict[loc_type] = loc_json
     return loc_dict
 
 
@@ -111,18 +108,14 @@ def print_locs(locs) -> None:
 def extract_yelp_data():
     # User input is temporary, categories will be hard coded later
     # Simply for testing (TEMPORARY)
-    sight_query = input("Enter a search query for sightseeing: ")
-    dine_query = input("Enter a search query for dining: ")
-    shop_query = input("Enter a search query for shops: ")
-
-    # User will be able to specify categories but for now they are all hard coded
-    # Each category has a search query attached to it.
-    cats = {'sightsee' : sight_query, 'dine': dine_query, 'shop' : shop_query}
-    # {'sightsee' : hiking, 'dine': dim sum, 'shop' : plant nursey}
-    search_results = perform_search(cats)
+    
+    # Replace later with requests from frontend
+    user_query = input("Enter a search query: ")
+    search_results = perform_search(user_query)
     json_data = parse_data(search_results)
 
     # TEMPORARY FOR DEBUGGING
+    # Print to console
     formatted_json = format_data(json_data)
     print(formatted_json)
     print('\n' * 10)
