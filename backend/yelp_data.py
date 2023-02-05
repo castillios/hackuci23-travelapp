@@ -71,6 +71,7 @@ def parse_data(loc_interests) -> dict:
     print(loc_interests)
     for cat, business_data in loc_interests.items():
         sorted_loc_dict[cat] = []
+        print(business_data.keys())
         for b in business_data['businesses']:
             b_dict = dict()
             b_dict['name'] = b['name']
@@ -135,4 +136,4 @@ def test_yelp_data(user_in, radius):
         
 
 if __name__ == "__main__":
-    extract_yelp_data("dim sum", 10000)
+    extract_yelp_data("dim sum", 1000)
