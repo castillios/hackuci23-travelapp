@@ -114,7 +114,7 @@ def extract_yelp_data(user_in, radius):
     json_data = parse_data(search_results)
 
     # can comment this out -- print is for testing
-    print(format_data(json_data))
+    #print(format_data(json_data))
     return json_data
 
 
@@ -130,7 +130,7 @@ def test_yelp_data(user_in, radius):
     # TEMPORARY FOR DEBUGGING
     # Print to console
     formatted_json = format_data(json_data)
-    print(formatted_json)
+    #print(formatted_json)
     print('\n' * 10)
     print_locs(json_data)
 
