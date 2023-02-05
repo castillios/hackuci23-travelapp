@@ -2,6 +2,7 @@
 import requests
 import json
 from distance_matrix import miles_to_meters
+import random
 
 # Returns JSON data
 # dictionary with keys ['businesses', 'total', 'region (containing center)']
@@ -68,7 +69,7 @@ to easily create the itinerary later on.
 """
 def parse_data(loc_interests) -> dict:
     sorted_loc_dict = dict()
-    print(loc_interests)
+    #print(loc_interests)
     for cat, business_data in loc_interests.items():
         sorted_loc_dict[cat] = []
         for b in business_data['businesses']:
@@ -117,6 +118,19 @@ def extract_yelp_data(user_in, radius):
     #print(format_data(json_data))
     return json_data
 
+# gets a random 50% subset of each of the locations for each interest
+def get_sample_of_yelp_data(yelp_dict):
+
+    random_sample = dict()
+
+    for interest in yelp_dict.keys():
+        # dict(random.sample(dictionary.items(), N))
+        interest_sample = dict(random.sample(yelp_dict[interest][0].items(), int(len(yelp_dict[interest][0].keys())/2)))
+        #interest_sample = random.sample(dict(sorted(yelp_dict[interest][0].items())), len(yelp_dict[interest])/2)
+        random_sample[interest] = interest_sample
+    #print(random_sample)
+    return random_sample
+
 
 # this function is for testing, can comment out
 def test_yelp_data(user_in, radius):
@@ -131,8 +145,8 @@ def test_yelp_data(user_in, radius):
     # Print to console
     formatted_json = format_data(json_data)
     #print(formatted_json)
-    print('\n' * 10)
-    print_locs(json_data)
+    #print('\n' * 10)
+    #print_locs(json_data)
 
     return json_data
 
