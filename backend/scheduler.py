@@ -1,3 +1,5 @@
+from distance_matrix import extract_distances
+from yelp_data import extract_yelp_data
 
 """
 Scheduler plans based on:
@@ -17,7 +19,7 @@ Scheduler plans based on:
 """
 
 class Itinerary:
-    def __init__(radius, interest):
+    def __init__(radius, interests, ):
         pass
 
     

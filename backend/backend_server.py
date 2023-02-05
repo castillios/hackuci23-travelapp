@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from distance_matrix import by_interest_and_dist, get_distance
-from yelp_data import perform_search, parse_data
+from yelp_data import extract_yelp_data
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -28,7 +28,7 @@ def places_by_dist():
 
 @app.route('/yelp')
 def yelp_locations():
-    return jsonify(parse_data(perform_search({'sightsee' : 'hiking', 'dine': 'dim sum', 'shop' : 'plant nursey'})))
+    return jsonify(extract_yelp_data(["dim sum", "museum", "thrift"]))
     # return jsonify(get_place(keyword="dine beach"))
 
 
