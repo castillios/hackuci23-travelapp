@@ -71,7 +71,6 @@ def parse_data(loc_interests) -> dict:
     print(loc_interests)
     for cat, business_data in loc_interests.items():
         sorted_loc_dict[cat] = []
-        print(business_data.keys())
         for b in business_data['businesses']:
             b_dict = dict()
             b_dict['name'] = b['name']
@@ -110,13 +109,18 @@ def print_locs(locs) -> None:
 # Our parameter user_in would be a list of str inputs received from the user which we iterate through
 def extract_yelp_data(user_in, radius):
     radius_meters = miles_to_meters(radius)
+    print(type(radius_meters))
     print(radius_meters)
     search_results = perform_search(user_in, radius_meters)
     # parse data receives a dictionary --> keyword:results
     json_data = parse_data(search_results)
+
+    # can comment this out -- print is for testing
+    print(format_data(json_data))
     return json_data
 
 
+# this function is for testing, can comment out
 def test_yelp_data(user_in, radius):
     # User input is temporary, categories will be hard coded later
     # Simply for testing (TEMPORARY)
