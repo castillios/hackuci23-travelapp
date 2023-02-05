@@ -19,6 +19,7 @@ def get_itinerary():
     print(type(activities))
     activities = activities.split('/')
 
+    # 40,000 meters is the max
     radius = float(request.args.get('Miles'))
 
     if eat == True:
