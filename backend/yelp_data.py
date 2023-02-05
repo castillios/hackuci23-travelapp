@@ -1,13 +1,13 @@
 # yelp_data.py
 import requests
 import json
+from distance_matrix import miles_to_meters
 
 # Returns JSON data
 # dictionary with keys ['businesses', 'total', 'region (containing center)']
-def get_place(keyword=""):
+def get_place(keyword="", radius=10000):
     url = "https://api.yelp.com/v3/businesses/search"
-
-    querystring = {"location":"University of California, Irvine","term":keyword}
+    querystring = {"location":"University of California, Irvine","term":keyword, "radius":radius}
 
     payload = ""
     headers = {"Authorization": "Bearer p50ITgphUvksSaf_a2ENswHKJscwJhR5ps0p00g7nfU8SBeBupjw6bfhaIoyLXygUzlKoN6XFxTvU4JTObchhULslD1PKiSLUf4TcYvhA5uhgI5c9c2Q4ICDsw_eY3Yx"}
@@ -26,20 +26,17 @@ JSON data under each category (key)
 
 key : value --> category : JSON data
 """
-def perform_search(query_list) -> dict:
+def perform_search(query_list, radius) -> dict:
     loc_dict = dict() 
-    # for query in query_list:
-    #     loc_dict[query] = None
-
     for loc_type in query_list:
-        loc_json = get_place(loc_type)
+        loc_json = get_place(loc_type, radius)
         loc_dict[loc_type] = loc_json
     return loc_dict
 
 
 """
 parse_data returns a dictionary containing keys for categories (business types)
-loc_interests is a fictionary
+loc_interests is a dictionary
 List of categories:
     - Sightseeing (sightsee)
     - Dining (dine)
@@ -71,6 +68,7 @@ to easily create the itinerary later on.
 """
 def parse_data(loc_interests) -> dict:
     sorted_loc_dict = dict()
+    print(loc_interests)
     for cat, business_data in loc_interests.items():
         sorted_loc_dict[cat] = []
         for b in business_data['businesses']:
@@ -109,8 +107,9 @@ def print_locs(locs) -> None:
 
 # Returns json data of search queries off of yelp using user input
 # Our parameter user_in would be a list of str inputs received from the user which we iterate through
-def extract_yelp_data(user_in):
-    search_results = perform_search(user_in)
+def extract_yelp_data(user_in, radius):
+    radius_meters = miles_to_meters(radius)
+    search_results = perform_search(user_in, radius_meters)
     # parse data receives a dictionary --> keyword:results
     json_data = parse_data(search_results)
     return json_data
@@ -136,5 +135,5 @@ def test_yelp_data():
 
         
 
-if __name__ == "__main__":
-    extract_yelp_data("dim sum")
+# if __name__ == "__main__":
+#     extract_yelp_data("dim sum", 10)
