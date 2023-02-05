@@ -36,12 +36,11 @@ h2 {
     font-family:"Comfortaa", sans-serif;
 }
 p{
-    background-color:#fff9f2ff;
+    background-color:bisque;
     color:#c19376;
-    text-align: center;
-    font-size: 15px;
-    margin-left: auto;
-    margin-right:auto;
+    text-align: left;
+    margin-left: 243px;
+    font-size: 20px;
     border-radius: 25px;
     padding: 12px;
     font-family:"Comfortaa", sans-serif;
@@ -102,4 +101,8 @@ html::-webkit-scrollbar-track:hover
 .shadowHide
 {
     display:none;
+}
+.final
+{
+    display:none; 
 }

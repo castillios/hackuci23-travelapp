@@ -42,8 +42,8 @@ function FoodYes()
 function Shadow()
 {
 
-
-    returnInfo['typeFood'] = document.getElementById('shadow').value;
+    var x = document.getElementById('shadowUser').value;
+    returnInfo['typeFood'] = x; 
     if(t2 === false)
     {
         document.getElementById('demo2').innerHTML = "What type of places would you like to see?";
@@ -84,16 +84,32 @@ function SightSeeing()
 }
 function SendOff()
 {
-  returnInfo["numHrs"] = document.getElementById('userInputBox4').value;
-  //give it to mlsa and mlha
-  let serverUrl= "https://26a1-169-234-111-136.ngrok.io?numActivites=" + returnInfo['numHours'] + "&food=" + returnInfo['food'] +
-   "&Sights=" + returnInfo['Sights'] + "&Miles=" + returnInfo['numHrs'] +'&Preference' + returnInfo[typeFood];  
-  fetch(serverUrl, {headers: new Headers({"ngrok-skip-browser-warning": "Sdf"})})
+
+  
+    returnInfo["numHrs"] = document.getElementById('userInputBox4').value;
+    //give it to mlsa and mlha
+    let serverUrl= "https://26a1-169-234-111-136.ngrok.io?numActivites=" + returnInfo['numHours'] + "&food=" + returnInfo['food'] +
+   "&Sights=" + returnInfo['Sights'] + "&Miles=" + returnInfo['numHrs'] +'&Preference' + returnInfo['typeFood'];  
+  
+   fetch(serverUrl, {headers: new Headers({"ngrok-skip-browser-warning": "Sdf"})})
         .then(res => res.json())
         .then(data => {
+            
+            demo4.classList.toggle("final"); 
+            document.getElementById('demo4').innerHTML = "Your Itinerary";
+            demo5.classList.toggle("final"); 
+            
+            var final_string = "";
+            
+            for(let k in data){
+                final_string += k + " " + data[k] + "<br>";
+            }
+            document.getElementById('demo5').innerHTML = final_string; 
+            
+            
             console.log(data)
             //document.getElementById('display').innerHTML = data.message
         })
-
-
+    
+    
 }

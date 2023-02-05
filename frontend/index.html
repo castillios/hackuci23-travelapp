@@ -17,37 +17,33 @@
             <h2>How many activities do you want? </h2>
             <label for="userInputBox1"></label>
             <div class="center">
-              <input type="number" id="userInputBox1" name="userInputBox1" placeholder="Enter number">
+              <input type="number" id="userInputBox1" name="userInputBox1" placeholder="Enter number" max="10">
               <button onclick="NumHours()">Submit</button>
-            </div>
 
-            <div class="center">
               <h2 id="demo"></h2>
               <button onclick  = "FoodYes()" id = "YesButton" name = "YesButton" class = "hide"> Yes</button>
               <button onclick  = "FoodNo()" id = "NoButton" name = "NoButton" class = "hide"> No</button>
-            </div>
 
             <h2 id = "shadow"></h2>
-            <div class="center">
             <input type = 'text' id = "shadowUser" name = 'shadowUser' placeholder = 'Indian' class = 'shadowHide'>
             <button onclick = "Shadow()" id = 'infiniteButton' name = 'shadow' class = 'shadowHide'> Enter</button>
-            </div>
             <h2 id="demo2"></h2>
-            <div class="center">
               <input type = 'text' name = 'userInputBox3' id = 'userInputBox3' class = 'hide2'
               placeholder="Beach/Museum/Park" width="600px">
               <button onclick = "SightSeeing()" id = "sight" name = "sight" class = "hide2"> Submit </button>
-            </div>
 
             <h2 id="demo3"></h2>
-            <div class="center">
               <input type="number" id="userInputBox4" name="userInputBox4" placeholder="0 miles" class = "hide3">
               <button onclick = "SendOff()" id = "finisher" name = "finisher" class = "hide3"> Submit </button>
             </div>
+            <h1 id="demo4" class="final"></h1>
 
+          <p type = "text" id ='demo5' class ='final'></p>
+          
         </div>  
         <div class="right"></div>
         <div class="bottom">
+
         </div>
         
       </div>
