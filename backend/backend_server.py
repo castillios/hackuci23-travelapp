@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-from distance_matrix import by_interest_and_dist, get_distance
+from distance_matrix import get_distance
 from yelp_data import perform_search, extract_yelp_data
 
 app = Flask(__name__)
@@ -14,13 +14,17 @@ def get_itinerary():
     num_hours = request.args.get('Hours')
     num_activities = request.args.get('numActivities')
     eat = request.args.get('food') # boolean
-    activities = request.args.get('Sights')
+
+    activities = request.args.get('Sights') # delimited string with slashes
+    activities = activities.split('/')
+
     radius = request.args.get('Miles')
 
     if eat == True:
-        food = request.args.get('')
+        food = request.args.get('Preference')
+        activities.extend(food)
 
-    yelp_dict = extract_yelp_data()
+    yelp_dict = extract_yelp_data(activities, radius)
 
     return "temporary return"
 
