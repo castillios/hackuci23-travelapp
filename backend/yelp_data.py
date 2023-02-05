@@ -68,7 +68,7 @@ to easily create the itinerary later on.
 """
 def parse_data(loc_interests) -> dict:
     sorted_loc_dict = dict()
-    print(loc_interests)
+    #print(loc_interests)
     for cat, business_data in loc_interests.items():
         sorted_loc_dict[cat] = []
         for b in business_data['businesses']:
@@ -131,8 +131,8 @@ def test_yelp_data(user_in, radius):
     # Print to console
     formatted_json = format_data(json_data)
     #print(formatted_json)
-    print('\n' * 10)
-    print_locs(json_data)
+    #print('\n' * 10)
+    #print_locs(json_data)
 
     return json_data
 
