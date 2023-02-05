@@ -22,8 +22,8 @@ def get_distance(addrFrom: str, addrTo: str):
 
 # input number of miles and will output in kilometers to the nearest integer
 def miles_to_meters(miles: int):
-    meters_in_mile = 1609.34
-    meters = float(miles) * float(meters_in_mile)
+    meters_in_mile = 1.609
+    meters = miles * meters_in_mile
     return int(meters)
 
 
