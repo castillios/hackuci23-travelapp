@@ -58,7 +58,7 @@ function FoodNo()
     returnInfo['food'] = false;
      
     document.getElementById('demo2').innerHTML = "What type of places would you like to see?";
-    if(t2 === false)
+    if(t1 === false)
     {
     userInputBox3.classList.toggle("hide2")
     sight.classList.toggle("hide2");
